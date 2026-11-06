@@ -1,0 +1,414 @@
+{
+  "info": {
+    "name": "ZAI 26Z - IoT Measurements API",
+    "description": "Oficjalna kolekcja Postman do testowania API projektu ZAI 26Z (Spring Boot)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. System",
+      "item": [
+        {
+          "name": "GET /api/health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Auth",
+      "item": [
+        {
+          "name": "POST /api/auth/login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    pm.environment.set('accessToken', json.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "POST /api/auth/logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/auth/password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"{{adminPassword}}\",\n  \"newPassword\": \"AdminNewPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "password"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Series",
+      "item": [
+        {
+          "name": "GET /api/series",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/series",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "series"]
+            }
+          }
+        },
+        {
+          "name": "POST /api/series",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    pm.environment.set('seriesId', json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Temperatura testowa\",\n  \"minValue\": -20.0,\n  \"maxValue\": 45.0,\n  \"color\": \"#e74c3c\",\n  \"unit\": \"°C\",\n  \"icon\": \"thermometer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/series",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "series"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/series/{seriesId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/series/{{seriesId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "series", "{{seriesId}}"]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/series/{seriesId}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Temperatura testowa (zaktualizowana)\",\n  \"minValue\": -25.0,\n  \"maxValue\": 50.0,\n  \"color\": \"#ff7f0e\",\n  \"unit\": \"°C\",\n  \"icon\": \"thermometer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/series/{{seriesId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "series", "{{seriesId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/series/{seriesId}",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/series/{{seriesId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "series", "{{seriesId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Sensors",
+      "item": [
+        {
+          "name": "GET /api/sensors",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sensors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sensors"]
+            }
+          }
+        },
+        {
+          "name": "POST /api/sensors",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    pm.environment.set('sensorId', json.id);",
+                  "    pm.environment.set('sensorApiKey', json.apiKey);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sensor-Pokojowy\",\n  \"seriesId\": {{seriesId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sensors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sensors"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/sensors/{sensorId}",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sensors/{{sensorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sensors", "{{sensorId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/sensors/{sensorId}",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sensors/{{sensorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sensors", "{{sensorId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Measurements",
+      "item": [
+        {
+          "name": "POST /api/measurements (Sensor API Key)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    pm.environment.set('measurementId', json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{sensorApiKey}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"value\": 21.5,\n  \"timestamp\": \"2026-11-06T12:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/measurements",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "measurements"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/measurements (All)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/measurements?limit=100",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "measurements"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "100"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/measurements (Filtered by series & sort)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/measurements?series={{seriesId}}&sort=timestamp&limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "measurements"],
+              "query": [
+                {
+                  "key": "series",
+                  "value": "{{seriesId}}"
+                },
+                {
+                  "key": "sort",
+                  "value": "timestamp"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/measurements/{measurementId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/measurements/{{measurementId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "measurements", "{{measurementId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
