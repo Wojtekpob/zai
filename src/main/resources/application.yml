@@ -1,0 +1,32 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-stacktrace: never
+    include-message: always
+
+spring:
+  application:
+    name: zai-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:./data/zai_db;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+app:
+  admin:
+    username: ${APP_ADMIN_USERNAME:admin}
+    password: ${APP_ADMIN_PASSWORD:Admin123!}
+  jwt:
+    secret: ${JWT_SECRET:9f8b4c2e1a7d5e6f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f}
+    expiration-seconds: ${JWT_EXPIRATION_SECONDS:86400}
